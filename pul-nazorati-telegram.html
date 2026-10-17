@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<title>Pul nazorati</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F5FA;--card:#fff;--ink:#0F172A;--mute:#6B7690;--line:#E6EAF3;--inc:#0EA877;--exp:#EF4668;--acc:linear-gradient(135deg,#4F46E5,#7C3AED);--accfg:#fff;--shadow:0 8px 28px rgba(79,70,229,.08);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B0F1E;--card:#151B30;--ink:#EEF1FB;--mute:#8F99B8;--line:#232B47;--inc:#34D399;--exp:#FB7185;--shadow:0 8px 28px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{--bg:#0B0F1E;--card:#151B30;--ink:#EEF1FB;--mute:#8F99B8;--line:#232B47;--inc:#34D399;--exp:#FB7185;--shadow:0 8px 28px rgba(0,0,0,.35)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;line-height:1.45}
+main{max-width:520px;margin:0 auto;padding:20px 16px 48px}
+.hero{background:linear-gradient(135deg,#4F46E5 0%,#7C3AED 55%,#0EA5E9 120%);color:#fff;border-radius:28px;padding:24px 20px 20px;margin-bottom:18px;box-shadow:0 16px 40px rgba(79,70,229,.35)}
+h1{font-size:14px;font-weight:600;color:rgba(255,255,255,.75);margin:0 0 6px}
+.bal{font-size:44px;font-weight:800;letter-spacing:-.03em;margin:0;line-height:1.1}
+.bal small{font-size:16px;font-weight:600;color:rgba(255,255,255,.75);margin-left:6px}
+.row{display:flex;gap:10px;margin:20px 0 0}
+.stat{flex:1;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:18px;padding:12px 14px}
+.stat span{display:block;font-size:13px;color:rgba(255,255,255,.75)}
+.stat b{font-size:18px}
+.inc{color:var(--inc)}.exp{color:var(--exp)}
+.hero .inc{color:#A7F3D0}.hero .exp{color:#FECDD3}
+.card{background:var(--card);border-radius:24px;padding:18px;margin-bottom:16px;box-shadow:var(--shadow)}
+h2{font-size:16px;margin:0 0 12px}
+.seg{display:flex;background:var(--bg);border-radius:999px;padding:4px;margin-bottom:14px}
+.seg button{flex:1;border:0;background:none;padding:10px;border-radius:999px;font:inherit;font-weight:600;color:var(--mute);cursor:pointer;transition:background .2s,color .2s}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 2px 8px rgba(15,23,42,.12)}
+input,select{width:100%;font:inherit;padding:14px 16px;border:1px solid transparent;border-radius:16px;background:var(--bg);color:var(--ink);margin-bottom:10px}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--inc);outline-offset:2px}
+.add{width:100%;border:0;border-radius:999px;padding:15px;font:inherit;font-weight:800;background:var(--acc);color:var(--accfg);cursor:pointer;box-shadow:0 10px 24px rgba(79,70,229,.35)}
+.add:active{transform:scale(.98)}
+.bar{margin-bottom:10px}
+.bar div.t{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.bar div.b{height:8px;background:var(--bg);border-radius:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#F43F5E,#FB923C);border-radius:8px}
+.item{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:0}
+.ic{width:42px;height:42px;border-radius:14px;background:color-mix(in srgb,var(--exp) 14%,transparent);display:grid;place-items:center;font-size:20px;flex:none}
+.ic.i{background:color-mix(in srgb,var(--inc) 14%,transparent)}
+.item .m{flex:1;min-width:0}
+.item .m b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .m span{font-size:12px;color:var(--mute)}
+.item .a{font-weight:800;white-space:nowrap}
+.del{border:0;background:none;color:var(--mute);font-size:20px;cursor:pointer;padding:4px 8px}
+.empty{color:var(--mute);font-size:14px;margin:0}
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <h1>Joriy balans</h1>
+    <p class="bal"><span id="bal">0</span><small>so'm</small></p>
+    <div class="row">
+      <div class="stat"><span>↓ Kirim</span><b class="inc" id="inc">0</b></div>
+      <div class="stat"><span>↑ Chiqim</span><b class="exp" id="exp">0</b></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Yangi yozuv</h2>
+    <div class="seg">
+      <button id="tE" class="on" type="button">Chiqim</button>
+      <button id="tI" type="button">Kirim</button>
+    </div>
+    <input id="amt" type="text" inputmode="numeric" placeholder="Summa (so'm)" autocomplete="off">
+    <select id="cat"></select>
+    <input id="note" type="text" placeholder="Izoh (ixtiyoriy)" maxlength="60">
+    <button class="add" id="add" type="button">Qo'shish</button>
+  </section>
+
+  <section class="card">
+    <h2>Chiqimlar kategoriya bo'yicha</h2>
+    <div id="bars"></div>
+  </section>
+
+  <section class="card">
+    <h2>Tarix</h2>
+    <div id="list"></div>
+  </section>
+</main>
+<script>
+const CATS={e:["Oziq-ovqat","Transport","Uy-joy","Kommunal","Kiyim","Sog'liq","Ko'ngilochar","Boshqa"],i:["Maosh","Qo'shimcha daromad","Sovg'a","Boshqa"]};
+const KEY="pul-nazorati-v1";
+const ICON={"Oziq-ovqat":"🛒","Transport":"🚕","Uy-joy":"🏠","Kommunal":"💡","Kiyim":"👕","Sog'liq":"💊","Ko'ngilochar":"🎬","Maosh":"💼","Qo'shimcha daromad":"✨","Sovg'a":"🎁","Boshqa":"•"};
+let type="e",items=[];
+try{const r=localStorage.getItem(KEY);if(r)items=JSON.parse(r)||[]}catch(e){items=[]}
+const $=id=>document.getElementById(id);
+const fmt=n=>Math.round(n).toLocaleString("ru-RU").replace(/\u00a0/g," ");
+const tg=window.Telegram&&Telegram.WebApp;
+const cloud=tg&&tg.initData&&tg.isVersionAtLeast&&tg.isVersionAtLeast("6.9")?tg.CloudStorage:null;
+const cSet=(k,v)=>new Promise(r=>cloud.setItem(k,v,()=>r()));
+const cGet=ks=>new Promise(r=>cloud.getItems(ks,(e,v)=>r(e?null:v)));
+async function cloudSave(){
+  const parts=JSON.stringify(items).match(/[\s\S]{1,3500}/g)||[];
+  await cSet(KEY+"_n",String(parts.length));
+  for(let i=0;i<parts.length;i++)await cSet(KEY+"_"+i,parts[i]);
+}
+async function cloudLoad(){
+  const n=await cGet([KEY+"_n"]);const c=n?+n[KEY+"_n"]:0;
+  if(!c){if(items.length)cloudSave();return}
+  const ks=Array.from({length:c},(_,i)=>KEY+"_"+i);const v=await cGet(ks);
+  if(!v)return;
+  try{items=JSON.parse(ks.map(k=>v[k]||"").join(""));try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){}render()}catch(e){}
+}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){}if(cloud)cloudSave();if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred("light")};
+function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function fillCats(){$("cat").innerHTML=CATS[type].map(c=>`<option>${esc(c)}</option>`).join("")}
+function setType(t){type=t;$("tE").classList.toggle("on",t==="e");$("tI").classList.toggle("on",t==="i");fillCats()}
+$("tE").onclick=()=>setType("e");$("tI").onclick=()=>setType("i");
+$("amt").addEventListener("input",e=>{const d=e.target.value.replace(/\D/g,"");e.target.value=d?fmt(+d):""});
+$("add").onclick=()=>{
+  const v=+$("amt").value.replace(/\D/g,"");
+  if(!v){$("amt").focus();return}
+  items.unshift({id:Date.now(),t:type,v,c:$("cat").value,n:$("note").value.trim(),d:new Date().toISOString()});
+  $("amt").value="";$("note").value="";save();render();
+};
+function del(id){items=items.filter(x=>x.id!==id);save();render()}
+function render(){
+  const inc=items.filter(x=>x.t==="i").reduce((s,x)=>s+x.v,0);
+  const exp=items.filter(x=>x.t==="e").reduce((s,x)=>s+x.v,0);
+  $("inc").textContent=fmt(inc);$("exp").textContent=fmt(exp);
+  $("bal").textContent=(inc-exp<0?"−":"")+fmt(Math.abs(inc-exp));
+  const by={};items.filter(x=>x.t==="e").forEach(x=>by[x.c]=(by[x.c]||0)+x.v);
+  const rows=Object.entries(by).sort((a,b)=>b[1]-a[1]);
+  $("bars").innerHTML=rows.length?rows.map(([c,v])=>`<div class="bar"><div class="t"><span>${esc(c)}</span><span>${fmt(v)} so'm · ${Math.round(v/exp*100)}%</span></div><div class="b"><i style="width:${v/exp*100}%"></i></div></div>`).join(""):'<p class="empty">Hali chiqim yo\'q. Birinchi xarajatingizni qo\'shing.</p>';
+  $("list").innerHTML=items.length?items.map(x=>{
+    const d=new Date(x.d).toLocaleDateString("uz-UZ",{day:"numeric",month:"short"});
+    return `<div class="item"><div class="ic ${x.t==="i"?"i":""}">${ICON[x.c]||"•"}</div><div class="m"><b>${esc(x.n||x.c)}</b><span>${esc(x.c)} · ${d}</span></div><div class="a ${x.t==="i"?"inc":"exp"}">${x.t==="i"?"+":"−"}${fmt(x.v)}</div><button class="del" aria-label="O'chirish" data-id="${x.id}">×</button></div>`}).join(""):'<p class="empty">Yozuvlar shu yerda ko\'rinadi.</p>';
+  document.querySelectorAll(".del").forEach(b=>b.onclick=()=>del(+b.dataset.id));
+}
+fillCats();render();
+if(tg){tg.ready();tg.expand();if(tg.colorScheme)document.documentElement.dataset.theme=tg.colorScheme;try{tg.setHeaderColor("#4F46E5")}catch(e){}}
+if(cloud)cloudLoad();
+</script>
+</body>
+</html>
